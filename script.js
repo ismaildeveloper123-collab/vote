@@ -89,7 +89,7 @@ function animateNumber(el, from, to, duration = 800) {
    --------------------------------------------------------- */
 async function fetchResults() {
   try {
-    const res = await axios.get(`${CONFIG.APPS_SCRIPT_URL}?action=results`);
+    const res = await axios.get(`${CONFIG.APPS_SCRIPT_URL}?action=results&_t=${Date.now()}`);
     updateResults(res.data);
   } catch (err) {
     console.error('Failed to fetch results', err);
@@ -244,7 +244,7 @@ function unlockVoting() {
 async function verifyVoteStatus() {
   const deviceId = getDeviceId();
   try {
-    const res = await axios.get(`${CONFIG.APPS_SCRIPT_URL}?action=check&email=${encodeURIComponent(deviceId)}`);
+    const res = await axios.get(`${CONFIG.APPS_SCRIPT_URL}?action=check&email=${encodeURIComponent(deviceId)}&_t=${Date.now()}`);
     if (res.data.voted) {
       localStorage.setItem(localVoteKey(), res.data.candidateId);
       lockVoting('You have already voted.', res.data.candidateId !== '1' ? res.data.candidateId : null);
@@ -341,6 +341,7 @@ async function submitVote(candidateId, candidateName) {
   url.searchParams.append('googleId', '');
   url.searchParams.append('candidateId', candidateId);
   url.searchParams.append('candidateName', candidateName);
+  url.searchParams.append('_t', Date.now());
 
   // 100% INSTANT UI FEEDBACK (No waiting for server!)
   localStorage.setItem(localVoteKey(), candidateId);

@@ -183,12 +183,12 @@ function getResults_() {
 
   for (let i = 0; i < values.length; i++) {
     const row = values[i];
-    const cid = String(row[0]);
+    const cid = String(row[0]).trim();
     // Skip empty, headers, or #N/A (if QUERY returns no data)
     if (!cid || cid === 'Candidate ID' || cid === 'Candidate Name' || cid === '#N/A') continue;
     
-    names[cid] = String(row[1]);
-    counts[cid] = Number(row[2]) || 0;
+    names[cid] = String(row[1]).trim();
+    counts[cid] = (counts[cid] || 0) + (Number(row[2]) || 0);
   }
 
   const totalVotes = Object.values(counts).reduce((a, b) => a + b, 0);
@@ -278,7 +278,7 @@ function incrementCount_(candidateId, candidateName) {
   let found = false;
   
   for (let i = 0; i < values.length; i++) {
-    if (String(values[i][0]) === String(candidateId)) {
+    if (String(values[i][0]).trim() === String(candidateId).trim()) {
       const newCount = (Number(values[i][2]) || 0) + 1;
       summarySheet.getRange(i + 1, 3).setValue(newCount);
       found = true;
