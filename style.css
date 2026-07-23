@@ -1,0 +1,193 @@
+/* =========================================================
+   STYLE.CSS — Luxury black & gold voting theme
+   ========================================================= */
+
+:root{
+  --gold-1: #f4d976;
+  --gold-2: #d4af37;
+  --gold-3: #a97e2f;
+  --bg-0: #060504;
+  --bg-1: #0d0b08;
+  --card-glass: rgba(24, 20, 12, 0.55);
+  --card-border: rgba(212, 175, 55, 0.35);
+}
+
+html, body{
+  background: var(--bg-0);
+  font-family: 'Cairo', sans-serif;
+}
+
+/* Ambient starlight background */
+.stars-bg{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(244,217,118,0.6), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(244,217,118,0.5), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(244,217,118,0.4), transparent),
+    radial-gradient(2px 2px at 85% 20%, rgba(244,217,118,0.5), transparent),
+    radial-gradient(1px 1px at 55% 15%, rgba(244,217,118,0.4), transparent);
+  background-repeat: repeat;
+  background-size: 600px 600px;
+  animation: twinkle 6s ease-in-out infinite alternate;
+}
+@keyframes twinkle{
+  from{ opacity: .5; }
+  to{ opacity: 1; }
+}
+
+.gold-text{
+  background: linear-gradient(180deg, var(--gold-1), var(--gold-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass-card{
+  background: var(--card-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: transform .4s ease, box-shadow .4s ease, border-color .4s ease;
+}
+
+.glass-card:hover{
+  transform: translateY(-6px);
+  border-color: rgba(244, 217, 118, 0.75);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.65), 0 0 30px rgba(212,175,55,0.15);
+}
+
+/* Rank badge */
+.rank-badge{
+  width: 52px;
+  height: 52px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #1a1305;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+  border: 2px solid rgba(255,255,255,0.35);
+}
+.rank-gold{ background: linear-gradient(145deg, #fff3c4, #d4af37 60%, #8a6a1f); }
+.rank-silver{ background: linear-gradient(145deg, #f2f2f2, #b9bcc2 60%, #7c8087); }
+.rank-bronze{ background: linear-gradient(145deg, #f0c39a, #b5652f 60%, #7a3f18); }
+
+/* Ribbon banner over the candidate name */
+.ribbon{
+  position: relative;
+  display: inline-block;
+  padding: 0.3rem 1.5rem;
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-3));
+  color: #1a1305;
+  font-weight: 700;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+/* Progress bar */
+.progress-track{
+  width: 100%;
+  height: 10px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+  border: 1px solid rgba(212,175,55,0.2);
+}
+.progress-fill{
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--gold-3), var(--gold-1));
+  transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+
+/* Vote button + ripple */
+.vote-btn{
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2) 55%, var(--gold-3));
+  color: #1a1305;
+  font-weight: 800;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.vote-btn:not(:disabled):hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(212,175,55,0.35);
+  filter: brightness(1.05);
+}
+.vote-btn:disabled{
+  background: linear-gradient(135deg, #4a4a4a, #2c2c2c);
+  color: #9a9a9a;
+  cursor: not-allowed;
+}
+.ripple{
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: rgba(255,255,255,0.55);
+  animation: ripple-anim .6s ease-out;
+  pointer-events: none;
+}
+@keyframes ripple-anim{
+  to{ transform: scale(3); opacity: 0; }
+}
+
+/* Card fade-in on load */
+.fade-in-up{
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeInUp .7s ease forwards;
+}
+@keyframes fadeInUp{
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+/* Card reorder transition */
+.candidate-card{
+  transition: order .5s ease, transform .5s ease;
+}
+
+/* Total votes counter box */
+.counter-box{
+  background: var(--card-glass);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+}
+
+/* Corner ornaments */
+.corner-orn{
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  opacity: .6;
+  pointer-events: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar{ width: 8px; }
+::-webkit-scrollbar-track{ background: var(--bg-1); }
+::-webkit-scrollbar-thumb{ background: var(--gold-3); border-radius: 4px; }
+
+/* Utility: pulse for live indicator */
+.pulse-dot{
+  width: 9px; height: 9px; border-radius: 9999px;
+  background: #4ade80;
+  box-shadow: 0 0 0 rgba(74, 222, 128, 0.6);
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot{
+  0%{ box-shadow: 0 0 0 0 rgba(74,222,128,0.6); }
+  70%{ box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important; }
+}

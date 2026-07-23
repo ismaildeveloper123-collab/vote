@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Live Vote</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen text-white relative overflow-x-hidden">
+
+<div class="stars-bg"></div>
+
+<header class="relative z-10 border-b border-[rgba(212,175,55,0.25)] bg-black/40 backdrop-blur-md">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+    <h1 class="text-xl md:text-2xl font-black gold-text">Admin Dashboard</h1>
+    <div class="flex items-center gap-4">
+      <!-- <a href="controller.html" class="text-sm underline text-gray-300 hover:text-[var(--gold-2)]">Voting Controller</a> -->
+      <a href="index.html" class="text-sm underline text-gray-300 hover:text-[var(--gold-2)]">Live Site</a>
+    </div>
+  </div>
+</header>
+
+<main class="relative z-10 max-w-6xl mx-auto px-4 py-10 space-y-10">
+
+  <!-- Total votes -->
+  <div class="counter-box rounded-2xl px-6 py-5 flex items-center justify-center gap-3 max-w-md mx-auto">
+    <span class="text-3xl">🗳️</span>
+    <span class="text-gray-300">Total Votes</span>
+    <span id="adminTotal" class="text-3xl font-black gold-text">0</span>
+  </div>
+
+  <!-- Ranking table -->
+  <div class="glass-card rounded-3xl p-6">
+    <h2 class="text-lg font-bold mb-4 gold-text">Candidate Ranking</h2>
+    <table class="w-full text-left">
+      <thead>
+        <tr class="text-gray-400 text-sm border-b border-[rgba(212,175,55,0.2)]">
+          <th class="py-2">Rank</th>
+          <th class="py-2">Candidate</th>
+          <th class="py-2">Votes</th>
+          <th class="py-2">Percentage</th>
+        </tr>
+      </thead>
+      <tbody id="rankingBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="glass-card rounded-3xl p-6">
+      <h2 class="text-lg font-bold mb-4 gold-text">Vote Distribution (Pie)</h2>
+      <canvas id="pieChart"></canvas>
+    </div>
+    <div class="glass-card rounded-3xl p-6">
+      <h2 class="text-lg font-bold mb-4 gold-text">Vote Comparison (Bar)</h2>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+
+  <p class="text-center text-xs text-gray-500 flex items-center justify-center gap-2">
+    <span class="pulse-dot"></span> Automatically updates every 5 seconds
+  </p>
+</main>
+
+<script src="config.js"></script>
+<script>
+let pieChart, barChart;
+const goldPalette = ['#f4d976', '#d4af37', '#a97e2f', '#8a6a1f', '#6b5117'];
+
+function initCharts(){
+  const ctxPie = document.getElementById('pieChart');
+  const ctxBar = document.getElementById('barChart');
+
+  pieChart = new Chart(ctxPie, {
+    type: 'pie',
+    data: { labels: [], datasets: [{ data: [], backgroundColor: goldPalette, borderColor: '#0d0b08', borderWidth: 2 }] },
+    options: { plugins: { legend: { labels: { color: '#e5e5e5' } } } }
+  });
+
+  barChart = new Chart(ctxBar, {
+    type: 'bar',
+    data: { labels: [], datasets: [{ label: 'Votes', data: [], backgroundColor: '#d4af37', borderRadius: 6 }] },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#e5e5e5' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: '#e5e5e5' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+}
+
+async function refreshAdmin(){
+  try{
+    const res = await axios.get(`${CONFIG.APPS_SCRIPT_URL}?action=results`);
+    const data = res.data;
+    document.getElementById('adminTotal').textContent = (data.totalVotes || 0).toLocaleString('en-US');
+
+    const entries = Object.values(data.candidates || {}).sort((a, b) => b.votes - a.votes);
+
+    document.getElementById('rankingBody').innerHTML = entries.map((c, i) => `
+      <tr class="border-b border-[rgba(212,175,55,0.08)]">
+        <td class="py-2 font-bold">${i + 1}</td>
+        <td class="py-2">${c.name}</td>
+        <td class="py-2 gold-text font-bold">${c.votes}</td>
+        <td class="py-2">${(c.percentage ?? 0).toFixed(1)}%</td>
+      </tr>
+    `).join('');
+
+    const labels = entries.map(c => c.name);
+    const votes = entries.map(c => c.votes);
+
+    pieChart.data.labels = labels;
+    pieChart.data.datasets[0].data = votes;
+    pieChart.update();
+
+    barChart.data.labels = labels;
+    barChart.data.datasets[0].data = votes;
+    barChart.update();
+  }catch(err){
+    console.error('Admin refresh failed', err);
+  }
+}
+
+window.addEventListener('load', () => {
+  initCharts();
+  refreshAdmin();
+  setInterval(refreshAdmin, CONFIG.REFRESH_INTERVAL_MS || 5000);
+});
+</script>
+</body>
+</html>

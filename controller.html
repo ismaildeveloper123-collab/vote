@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controller | Live Vote</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen text-white relative overflow-x-hidden">
+
+<div class="stars-bg"></div>
+
+<header id="appHeader" class="relative z-10 border-b border-[rgba(212,175,55,0.25)] bg-black/40 backdrop-blur-md" style="display: none;">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+    <h1 class="text-xl md:text-2xl font-black gold-text">Voting Controller</h1>
+    <div class="flex items-center gap-4">
+      <a href="admin.html" class="text-sm underline text-gray-300 hover:text-[var(--gold-2)]">Admin Dashboard</a>
+      <a href="index.html" class="text-sm underline text-gray-300 hover:text-[var(--gold-2)]">Live Site</a>
+    </div>
+  </div>
+</header>
+
+<main id="appMain" class="relative z-10 max-w-lg mx-auto px-4 py-10 space-y-10" style="display: none;">
+  <div class="glass-card rounded-3xl p-8 text-center">
+    <h2 class="text-2xl font-bold mb-2">Current Status</h2>
+    <div id="statusIndicator" class="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-gray-600 bg-gray-800/50 mb-8">
+      <span class="pulse-dot bg-gray-500"></span>
+      <span id="statusText" class="font-bold text-gray-400">Loading...</span>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <button onclick="setStatus('OPEN')" class="w-full py-4 rounded-xl font-bold text-lg bg-green-600/20 hover:bg-green-600/40 border border-green-500/50 text-green-400 transition-colors flex items-center justify-center gap-2">
+        <span>✅</span> Start Voting
+      </button>
+      <button onclick="setStatus('CLOSED')" class="w-full py-4 rounded-xl font-bold text-lg bg-red-600/20 hover:bg-red-600/40 border border-red-500/50 text-red-400 transition-colors flex items-center justify-center gap-2">
+        <span>⛔</span> Stop Voting
+      </button>
+    </div>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script>
+  let currentPassword = '';
+
+  async function fetchStatus() {
+    try {
+      const res = await axios.get(`${CONFIG.APPS_SCRIPT_URL}?action=results`);
+      const status = res.data.votingStatus || 'OPEN';
+      updateStatusUI(status);
+    } catch(err) {
+      console.error('Failed to fetch status', err);
+    }
+  }
+
+  function updateStatusUI(status) {
+    const indicator = document.getElementById('statusIndicator');
+    const dot = indicator.querySelector('span:first-child');
+    const text = document.getElementById('statusText');
+
+    if (status === 'CLOSED') {
+      indicator.className = 'inline-flex items-center gap-3 px-6 py-3 rounded-full border border-red-500/40 bg-red-950/40 mb-8';
+      dot.className = 'w-3 h-3 rounded-full bg-red-500';
+      text.className = 'font-bold text-red-400';
+      text.textContent = 'Voting Closed';
+    } else {
+      indicator.className = 'inline-flex items-center gap-3 px-6 py-3 rounded-full border border-green-500/40 bg-green-950/40 mb-8';
+      dot.className = 'w-3 h-3 rounded-full bg-green-500 pulse-dot'; 
+      text.className = 'font-bold text-green-400';
+      text.textContent = 'Voting Open';
+    }
+  }
+
+  async function setStatus(status) {
+    try {
+      Swal.fire({
+        title: 'Updating...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading() },
+        background: '#0d0b08', color: '#f4d976'
+      });
+
+      const payload = { action: 'setStatus', status: status, password: currentPassword };
+      const res = await axios.post(CONFIG.APPS_SCRIPT_URL, JSON.stringify(payload), {
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+
+      if (res.data.success) {
+        Swal.fire({
+          icon: 'success', title: 'Success', text: res.data.message,
+          background: '#0d0b08', color: '#f4d976', confirmButtonColor: '#d4af37'
+        });
+        updateStatusUI(res.data.status);
+      } else {
+        throw new Error(res.data.message || 'Unknown error');
+      }
+    } catch(err) {
+      console.error(err);
+      Swal.fire({
+        icon: 'error', title: 'Error', text: 'Failed to update status.',
+        background: '#0d0b08', color: '#f4d976', confirmButtonColor: '#d4af37'
+      });
+    }
+  }
+
+  async function promptPassword() {
+    const { value: pass } = await Swal.fire({
+      title: 'Enter Password',
+      input: 'password',
+      inputPlaceholder: 'Enter digit password',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      confirmButtonText: 'Login',
+      background: '#0d0b08',
+      color: '#f4d976',
+      confirmButtonColor: '#d4af37',
+      inputValidator: (value) => {
+        if (!value) return 'You need to write something!';
+      }
+    });
+
+    if (pass) {
+      Swal.fire({
+        title: 'Verifying...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading() },
+        background: '#0d0b08', color: '#f4d976'
+      });
+
+      try {
+        const res = await axios.get(`${CONFIG.APPS_SCRIPT_URL}?action=verifyPassword&pass=${pass}`);
+        if (res.data.success) {
+          currentPassword = pass;
+          Swal.close();
+          document.getElementById('appHeader').style.display = 'block';
+          document.getElementById('appMain').style.display = 'block';
+          fetchStatus();
+          setInterval(fetchStatus, CONFIG.REFRESH_INTERVAL_MS || 5000);
+        } else {
+          Swal.fire({
+            icon: 'error', title: 'Access Denied', text: 'Incorrect password.',
+            background: '#0d0b08', color: '#f4d976', confirmButtonColor: '#d4af37'
+          }).then(() => { promptPassword(); });
+        }
+      } catch (err) {
+        console.error(err);
+        Swal.fire({
+          icon: 'error', title: 'Error', text: 'Failed to connect to server.',
+          background: '#0d0b08', color: '#f4d976', confirmButtonColor: '#d4af37'
+        }).then(() => { promptPassword(); });
+      }
+    }
+  }
+
+  window.addEventListener('load', () => {
+    promptPassword();
+  });
+</script>
+</body>
+</html>
