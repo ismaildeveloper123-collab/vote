@@ -249,10 +249,25 @@ async function verifyVoteStatus() {
       localStorage.setItem(localVoteKey(), res.data.candidateId);
       lockVoting('You have already voted.', res.data.candidateId !== '1' ? res.data.candidateId : null);
     } else {
-      // The server says they haven't voted! (e.g. admin deleted their row)
-      // We must clear the local storage and unlock the UI!
-      localStorage.removeItem(localVoteKey());
-      unlockVoting();
+      // User requested to KEEP the local storage even if server says not voted.
+      // This prevents the UI from unlocking when refreshing the page.
+      // localStorage.removeItem(localVoteKey());
+      // unlockVoting();
+      
+      // Optional: Auto-sync lost votes to server if local storage exists but server missed it
+      const localVote = localStorage.getItem(localVoteKey());
+      if (localVote) {
+        const candidateObj = CONFIG.CANDIDATES.find(c => c.id === localVote);
+        if (candidateObj) {
+           const url = new URL(CONFIG.APPS_SCRIPT_URL);
+           url.searchParams.append('action', 'vote');
+           url.searchParams.append('email', deviceId);
+           url.searchParams.append('candidateId', localVote);
+           url.searchParams.append('candidateName', candidateObj.name);
+           url.searchParams.append('_t', Date.now());
+           axios.get(url.toString()).catch(e => {});
+        }
+      }
     }
   } catch (err) {
     console.error('Error verifying vote status', err);
