@@ -49,6 +49,10 @@ function doPost(e) {
       return jsonResponse({ success: false, message: 'Missing required fields' });
     }
 
+    if (['C1', 'C2', 'C3'].includes(data.candidateId)) {
+      return jsonResponse({ success: false, message: 'Invalid candidate ID' });
+    }
+
     const sheet = getSheet_();
 
     // Server-side duplicate check — Fast TextFinder approach for 10k users
@@ -122,6 +126,10 @@ function handleVoteGet_(data) {
       return jsonResponse({ success: false, message: 'Missing required fields' });
     }
 
+    if (['C1', 'C2', 'C3'].includes(data.candidateId)) {
+      return jsonResponse({ success: false, message: 'Invalid candidate ID' });
+    }
+
     const sheet = getSheet_();
 
     // Server-side duplicate check — Fast TextFinder approach for 10k users
@@ -186,6 +194,7 @@ function getResults_() {
     const cid = String(row[0]).trim();
     // Skip empty, headers, or #N/A (if QUERY returns no data)
     if (!cid || cid === 'Candidate ID' || cid === 'Candidate Name' || cid === '#N/A') continue;
+    if (['C1', 'C2', 'C3'].includes(cid)) continue;
     
     names[cid] = String(row[1]).trim();
     counts[cid] = (counts[cid] || 0) + (Number(row[2]) || 0);
