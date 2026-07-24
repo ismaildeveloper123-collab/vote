@@ -1,233 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <!-- Primary Meta Tags -->
-  <title>برنامج حوارة الموسم ( الموسم الثاني ) | Live Vote</title>
-  <meta name="title" content="برنامج حوارة الموسم ( الموسم الثاني ) | Live Vote">
-  <meta name="description"
-    content="شارك وصوّت الآن لمرشحك المفضل في برنامج حوارة الموسم ( الموسم الثاني ). التصويت المباشر متاح الآن!">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://voting.darkmedia.tech/">
-  <meta property="og:title" content="برنامج حوارة الموسم ( الموسم الثاني ) | Live Vote">
-  <meta property="og:description"
-    content="شارك وصوّت الآن لمرشحك المفضل في برنامج حوارة الموسم ( الموسم الثاني ). التصويت المباشر متاح الآن!">
-  <meta property="og:image" content="https://voting.darkmedia.tech/allimg/thumbnail_v2.jpeg">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://voting.darkmedia.tech/">
-  <meta name="twitter:title" content="برنامج حوارة الموسم ( الموسم الثاني ) | Live Vote">
-  <meta name="twitter:description"
-    content="شارك وصوّت الآن لمرشحك المفضل في برنامج حوارة الموسم ( الموسم الثاني ). التصويت المباشر متاح الآن!">
-  <meta name="twitter:image" content="https://voting.darkmedia.tech/allimg/thumbnail_v2.jpeg">
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Font: Cairo (Arabic) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
-  <!-- Axios -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Images</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background-color: #000; /* Optional: black background */
+    }
+    .responsive-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
 </head>
-
-<body class="min-h-screen text-white relative overflow-x-hidden">
-
-  <div class="stars-bg"></div>
-
-  <!-- Browser Check Overlay (Commented out as requested) 
-  <div id="browserOverlay" class="fixed inset-0 bg-black/95 z-[9999] hidden flex-col items-center justify-center p-6 text-center backdrop-blur-xl">
-    <div class="glass-card p-8 rounded-3xl max-w-md w-full border border-[rgba(212,175,55,0.4)] shadow-[0_0_50px_rgba(212,175,55,0.15)] relative overflow-hidden">
-      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--gold-1)] to-transparent"></div>
-      
-      <div class="flex justify-center gap-4 mb-6">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" alt="Chrome" class="w-16 h-16 drop-shadow-lg">
-      </div>
-      
-      <h2 class="text-2xl font-black text-white mb-3">Please Open in Chrome</h2>
-      <p class="text-gray-300 mb-8 text-sm leading-relaxed font-semibold">
-        To ensure voting works correctly and securely, please open this link using Google Chrome or Safari.
-      </p>
-      
-      <div id="btnContainerIOS" class="w-full hidden">
-        <a href="googlechromes://voting.darkmedia.tech/" target="_blank" rel="noopener noreferrer" class="block w-full bg-gradient-to-r from-[var(--gold-1)] to-[var(--gold-2)] text-black font-black text-lg py-4 rounded-xl hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-          Open in Google Chrome
-        </a>
-      </div>
-      <div id="btnContainerAndroid" class="w-full hidden">
-        <a href="intent://voting.darkmedia.tech/#Intent;scheme=https;package=com.android.chrome;end" target="_blank" rel="noopener noreferrer" class="block w-full bg-gradient-to-r from-[var(--gold-1)] to-[var(--gold-2)] text-black font-black text-lg py-4 rounded-xl hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-          Open in Google Chrome
-        </a>
-      </div>
-      <div id="btnContainerOther" class="w-full hidden flex-col gap-3">
-        <button id="copyLinkBtn" class="w-full bg-gradient-to-r from-[var(--gold-1)] to-[var(--gold-2)] text-black font-black text-lg py-4 rounded-xl hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-          Copy Link
-        </button>
-        <button id="openChromeBtn" class="block w-full bg-black/60 border border-[var(--gold-1)] text-[var(--gold-1)] font-black text-lg py-4 rounded-xl hover:scale-[1.02] transition-transform shadow-[0_0_10px_rgba(212,175,55,0.2)]">
-          Open in Chrome
-        </button>
-      </div>
-      
-      <p class="text-xs text-gray-500 mt-4">
-        If the button doesn't work, please copy the link and open it manually in your browser.
-      </p>
-    </div>
-  </div>
-  -->
-
-  <!-- ============ HEADER ============ -->
-  <header class="relative z-10 border-b border-[rgba(212,175,55,0.25)] bg-black/40 backdrop-blur-md">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
-
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl rank-gold rank-badge">🗳️</div>
-        <div>
-          <h1 class="text-xl md:text-2xl font-black gold-text">برنامج حوارة الموسم ( الموسم الثاني )</h1>
-          <p class="text-xs text-gray-400 flex items-center gap-1">
-            <span class="pulse-dot"></span> Live Results
-          </p>
-        </div>
-      </div>
-
-      <!-- Counters -->
-      <div class="flex flex-col md:flex-row items-center gap-4">
-        <!-- Leader counter -->
-        <div id="topCandidateBox" class="counter-box rounded-2xl px-6 py-3 flex items-center gap-3 hidden">
-          <span class="text-2xl">🏆</span>
-          <span id="leaderLabel" class="text-sm text-gray-300">Leading:</span>
-          <span id="topCandidateName" class="font-bold">---</span>
-          <span class="w-px h-6 bg-[rgba(212,175,55,0.4)]"></span>
-          <span id="topCandidateVotes" class="text-2xl font-black gold-text">0</span>
-        </div>
-
-        <!-- Total votes counter -->
-        <div class="counter-box rounded-2xl px-6 py-3 flex items-center gap-3">
-          <span class="text-2xl">🗳️</span>
-          <span class="text-sm text-gray-300">Total Votes</span>
-          <span class="w-px h-6 bg-[rgba(212,175,55,0.4)]"></span>
-          <span id="totalVotes" class="text-2xl font-black gold-text">0</span>
-        </div>
-      </div>
-
-
-    </div>
-  </header>
-
-  <!-- ============ MAIN ============ -->
-  <main class="relative z-10 max-w-6xl mx-auto px-4 py-10">
-
-    <p id="statusBanner" class="hidden text-center mb-8 py-3 px-4 rounded-xl border text-sm font-semibold"></p>
-
-    <div id="candidatesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Candidate cards injected by script.js -->
-    </div>
-
-    <p class="text-center text-xs text-gray-500 mt-12">
-      You can vote only once per device. Duplicates are checked on the server to ensure voting integrity.
-    </p>
-    <p class="text-center text-xs text-gray-600 mt-2">
-      <a href="admin.html" class="underline hover:text-[var(--gold-2)]">Admin Dashboard</a>
-    </p>
-  </main>
-
-  <script src="config.js?v=5"></script>
-  <script src="script.js?v=5"></script>
-
-  <script>
-    /* Browser check overlay commented out
-    (function () {
-      const ua = navigator.userAgent || navigator.vendor || window.opera;
-      const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-      const isAndroid = /android/i.test(ua);
-      const isInApp = /FBAV|FBAN|Instagram|Line|Snapchat|Viber|WhatsApp|Threads|TikTok|Twitter|XApp|twttr/i.test(ua);
-      const isChrome = /CriOS|Chrome/i.test(ua) && !/Edg|OPR|SamsungBrowser/i.test(ua);
-      // On iOS, Chrome's UA contains "CriOS". On Android, "Chrome" without "wv" (webview) usually means real Chrome.
-      const isAndroidChrome = isAndroid && /Chrome\//.test(ua) && !/wv\)/.test(ua) && !isInApp;
-
-      const overlay = document.getElementById('browserOverlay');
-      const btnIOS = document.getElementById('btnContainerIOS');
-      const btnAndroid = document.getElementById('btnContainerAndroid');
-      const btnOther = document.getElementById('btnContainerOther');
-
-      function showOverlay(which) {
-        overlay.classList.remove('hidden');
-        overlay.classList.add('flex');
-        which.classList.remove('hidden');
-        which.classList.add('flex');
-      }
-
-      if (isIOS && isInApp) {
-        // Immediately show the overlay. Auto-redirecting custom schemes on load causes WKWebView white-page crashes on X/Twitter.
-        showOverlay(btnIOS);
-      } else if (isAndroid && isInApp) {
-        // Immediately show the overlay.
-        showOverlay(btnAndroid);
-      }
-
-      // Add copyLinkBtn listener (as it was in the original logic)
-      const copyBtn = document.getElementById('copyLinkBtn');
-      if (copyBtn) {
-        copyBtn.addEventListener('click', function() {
-          const textToCopy = 'https://voting.darkmedia.tech/';
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(textToCopy).then(() => {
-              alert('Link copied! Please open it in Google Chrome or Safari.');
-            }).catch(() => {
-              alert('Please copy the link manually and open it in Google Chrome or Safari.');
-            });
-          } else {
-            // Fallback for WebViews that disable the Clipboard API
-            const tempInput = document.createElement('input');
-            tempInput.value = textToCopy;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            try {
-              document.execCommand('copy');
-              alert('Link copied! Please open it in Google Chrome or Safari.');
-            } catch (err) {
-              alert('Please copy the link manually and open it in Google Chrome or Safari.');
-            }
-            document.body.removeChild(tempInput);
-          }
-        });
-      }
-
-      // Add openChromeBtn listener for btnContainerOther
-      const openChromeBtn = document.getElementById('openChromeBtn');
-      if (openChromeBtn) {
-        openChromeBtn.addEventListener('click', function () {
-          const intentUrl = 'intent://voting.darkmedia.tech/#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' 
-            + encodeURIComponent('https://voting.darkmedia.tech/') 
-            + ';end';
-
-          // Try to launch Chrome via intent
-          window.location.href = intentUrl;
-
-          // Fallback: if intent doesn't fire (e.g., desktop or unsupported), redirect manually after a delay
-          setTimeout(function () {
-            window.location.href = 'https://voting.darkmedia.tech/';
-          }, 1500);
-        });
-      }
-    })();
-    */
-  </script>
+<body>
+  <img src="allimg/two.jpg" alt="One" class="responsive-img">
+  <img src="allimg/one.jpg" alt="Two" class="responsive-img">
 </body>
-
 </html>
