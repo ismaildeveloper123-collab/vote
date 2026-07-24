@@ -34,28 +34,21 @@ const CONFIG = {
   //    "image" can be any public image URL or a local path.
   CANDIDATES: [
     {
-      id: "C1",
-      name: "المشارك سعود ذعار السهلي",
+      id: "CS1",
+      name: "  المشارك / طلال نزال العازمي ",
       image: "allimg/1.jpeg"
     },
     {
-      id: "C2",
-      name: "المشارك مبارك ملفي بن عزاره الحربي",
+      id: "CS2",
+      name: "المشارك / سيف بن سعد بن دايل المساعرة",
       image: "allimg/2.jpeg"
     },
     {
-      id: "C3",
-      name: "المشارك ناصر جمعان بن لحيان العازمي ",
+      id: "CS3",
+      name: "المشارك / بدر فايز الحربي ",
       image: "allimg/3.jpeg"
     }
   ],
 
-  // 5) Static vote offsets (base counts added to live data)
-  // These numbers are added to the votes fetched from the sheet.
-  // Note: C1 and C2 were both mentioned in the prompt, please swap their values if needed.
-  STATIC_VOTES: {
-    "C1": 4613,
-    "C2": 41958,
-    "C3": 46996
-  }
+
 };

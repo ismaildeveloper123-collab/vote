@@ -41,7 +41,7 @@ function buildCardHTML(candidate, rankIndex) {
 
       <p class="text-gray-400 text-sm mb-1">Votes</p>
       <p class="text-2xl font-black gold-text mb-3">
-        <span data-role="votes">${((typeof CONFIG !== 'undefined' && CONFIG.STATIC_VOTES && CONFIG.STATIC_VOTES[candidate.id]) || 0).toLocaleString('en-US')}</span>
+        <span data-role="votes">0</span>
       </p>
 
       <div class="progress-track mb-1">
@@ -60,14 +60,6 @@ function buildCardHTML(candidate, rankIndex) {
 
 function renderInitialCards() {
   grid.innerHTML = CONFIG.CANDIDATES.map((c, i) => buildCardHTML(c, i)).join('');
-  
-  if (typeof CONFIG !== 'undefined' && CONFIG.STATIC_VOTES) {
-    const totalStaticVotes = Object.values(CONFIG.STATIC_VOTES).reduce((sum, val) => sum + val, 0);
-    const totalVotesEl = document.getElementById('totalVotes');
-    if (totalVotesEl) {
-      totalVotesEl.textContent = totalStaticVotes.toLocaleString('en-US');
-    }
-  }
 }
 
 /* ---------------------------------------------------------
@@ -201,10 +193,10 @@ function startPolling() {
    4. DEVICE IDENTITY (LOCAL STORAGE)
    --------------------------------------------------------- */
 function getDeviceId() {
-  let id = localStorage.getItem('live_vote_device_idseason1');
+  let id = localStorage.getItem('live_vote_device_idseason3');
   if (!id) {
     id = 'device_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-    localStorage.setItem('live_vote_device_idseason1', id);
+    localStorage.setItem('live_vote_device_idseason3', id);
   }
   return id;
 }
@@ -213,7 +205,7 @@ function getDeviceId() {
    5. VOTING
    --------------------------------------------------------- */
 function localVoteKey() {
-  return `voted_statusseason1`;
+  return `voted_statusseason3`;
 }
 
 function checkLocalVoteFlag() {
