@@ -34,17 +34,17 @@ const CONFIG = {
   //    "image" can be any public image URL or a local path.
   CANDIDATES: [
     {
-      id: "C1",
+      id: "CS1",
       name: "  المشارك / طلال نزال العازمي ",
       image: "allimg/1.jpeg"
     },
     {
-      id: "C2",
+      id: "CS2",
       name: "المشارك / سيف بن سعد بن دايل المساعرة",
       image: "allimg/2.jpeg"
     },
     {
-      id: "C3",
+      id: "CS3",
       name: "المشارك / بدر فايز الحربي ",
       image: "allimg/3.jpeg"
     }
