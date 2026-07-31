@@ -35,18 +35,23 @@ const CONFIG = {
   CANDIDATES: [
     {
       id: "CS1",
-      name: "  المشارك / طلال نزال العازمي ",
+      name: "  المشارك / طلال نزال العازمي",
       image: "allimg/1.jpeg"
     },
     {
       id: "CS2",
-      name: "المشارك / سيف بن سعد بن دايل المساعرة",
+      name: "المشارك / عيسى العازمي",
       image: "allimg/2.jpeg"
     },
     {
       id: "CS3",
-      name: "المشارك / بدر فايز الحربي ",
+      name: "المشارك / مبارك ملفي بن عزازة الحربي ",
       image: "allimg/3.jpeg"
+    },
+    {
+      id: "CS4",
+      name: "المشارك / نايل الخريم المساعرة ",
+      image: "allimg/4.jpeg"
     }
   ],
 

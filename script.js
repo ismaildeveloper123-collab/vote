@@ -15,12 +15,12 @@ const statusBanner = document.getElementById('statusBanner');
    1. INITIAL RENDER (static shell, before first live fetch)
    --------------------------------------------------------- */
 function buildCardHTML(candidate, rankIndex) {
-  const rankClasses = ['rank-gold', 'rank-silver', 'rank-bronze'];
-  const rankNumbers = ['1', '2', '3'];
+  const rankClasses = ['rank-gold', 'rank-silver', 'rank-bronze', 'rank-bronze'];
+  const rankNumbers = ['1', '2', '3', '4'];
   const rankClass = rankClasses[rankIndex] ?? 'rank-bronze';
 
   return `
-    <div class="candidate-card fade-in-up glass-card rounded-3xl p-6 pt-10 relative flex flex-col items-center text-center"
+    <div class="candidate-card h-full fade-in-up glass-card rounded-3xl p-6 pt-10 relative flex flex-col items-center text-center"
          style="animation-delay:${rankIndex * 0.12}s"
          data-id="${candidate.id}">
 
@@ -28,32 +28,34 @@ function buildCardHTML(candidate, rankIndex) {
         ${rankNumbers[rankIndex] ?? rankIndex + 1}
       </div>
 
-      <span class="ribbon mb-4 text-sm" data-role="ribbon">Option ${['One', 'Two', 'Three'][rankIndex] ?? rankIndex + 1}</span>
+      <span class="ribbon mb-4 text-sm" data-role="ribbon">Option ${['One', 'Two', 'Three', 'Four'][rankIndex] ?? rankIndex + 1}</span>
 
-      <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden border border-[rgba(212,175,55,0.3)] mb-4 bg-black/40 flex items-center justify-center">
-        <img src="${candidate.image}" alt="${candidate.name}" class="w-full h-full object-contain">
+      <div class="w-full rounded-2xl overflow-hidden border border-[rgba(212,175,55,0.3)] mb-4 bg-black/40 flex items-center justify-center">
+        <img src="${candidate.image}" alt="${candidate.name}" class="w-full h-auto object-cover">
       </div>
 
       <p class="text-gray-400 text-sm mb-1">Candidate</p>
       <h3 class="text-lg font-bold mb-3">${candidate.name}</h3>
 
-      <div class="w-2/3 h-px bg-[rgba(212,175,55,0.3)] mb-3"></div>
+      <div class="mt-auto w-full flex flex-col items-center">
+        <div class="w-2/3 h-px bg-[rgba(212,175,55,0.3)] mb-3"></div>
 
-      <p class="text-gray-400 text-sm mb-1">Votes</p>
-      <p class="text-2xl font-black gold-text mb-3">
-        <span data-role="votes">0</span>
-      </p>
+        <p class="text-gray-400 text-sm mb-1">Votes</p>
+        <p class="text-2xl font-black gold-text mb-3">
+          <span data-role="votes">0</span>
+        </p>
 
-      <div class="progress-track mb-1">
-        <div class="progress-fill" data-role="progress" style="width:0%"></div>
+        <div class="progress-track mb-1">
+          <div class="progress-fill" data-role="progress" style="width:0%"></div>
+        </div>
+        <p class="text-xs text-gray-400 mb-4"><span data-role="percentage">0</span>%</p>
+
+        <button data-role="vote-btn"
+                class="vote-btn w-full py-3 rounded-xl flex items-center justify-center gap-2"
+                onclick="handleVoteClick(event, '${candidate.id}', '${candidate.name.replace(/'/g, "\\'")}')">
+          <span>✅</span> صوّت الآن
+        </button>
       </div>
-      <p class="text-xs text-gray-400 mb-4"><span data-role="percentage">0</span>%</p>
-
-      <button data-role="vote-btn"
-              class="vote-btn w-full py-3 rounded-xl flex items-center justify-center gap-2"
-              onclick="handleVoteClick(event, '${candidate.id}', '${candidate.name.replace(/'/g, "\\'")}')">
-        <span>✅</span> صوّت الآن
-      </button>
     </div>
   `;
 }
@@ -205,7 +207,7 @@ function getDeviceId() {
    5. VOTING
    --------------------------------------------------------- */
 function localVoteKey() {
-  return `voted_statusseason3`;
+  return `voted_statusseason4`;
 }
 
 function checkLocalVoteFlag() {
