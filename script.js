@@ -15,12 +15,13 @@ const statusBanner = document.getElementById('statusBanner');
    1. INITIAL RENDER (static shell, before first live fetch)
    --------------------------------------------------------- */
 function buildCardHTML(candidate, rankIndex) {
-  const rankClasses = ['rank-gold', 'rank-silver', 'rank-bronze', 'rank-bronze'];
-  const rankNumbers = ['1', '2', '3', '4'];
+  const rankClasses = ['rank-gold', 'rank-silver', 'rank-bronze'];
+  const rankNumbers = ['1', '2', '3'];
+  const optionNames = ['Option One', 'Option Two', 'Option Three'];
   const rankClass = rankClasses[rankIndex] ?? 'rank-bronze';
 
   return `
-    <div class="candidate-card h-full fade-in-up glass-card rounded-3xl p-6 pt-10 relative flex flex-col items-center text-center"
+    <div class="candidate-card h-full fade-in-up glass-card rounded-3xl p-5 sm:p-6 pt-9 sm:pt-10 relative flex flex-col items-center text-center"
          style="animation-delay:${rankIndex * 0.12}s"
          data-id="${candidate.id}">
 
@@ -28,30 +29,32 @@ function buildCardHTML(candidate, rankIndex) {
         ${rankNumbers[rankIndex] ?? rankIndex + 1}
       </div>
 
-      <span class="ribbon mb-4 text-sm" data-role="ribbon">Option ${['One', 'Two', 'Three', 'Four'][rankIndex] ?? rankIndex + 1}</span>
+      <span class="ribbon mb-4 text-xs sm:text-sm font-bold" data-role="ribbon">${optionNames[rankIndex] ?? 'Option ' + (rankIndex + 1)}</span>
 
-      <div class="w-full rounded-2xl overflow-hidden border border-[rgba(212,175,55,0.3)] mb-4 bg-black/40 flex items-center justify-center">
-        <img src="${candidate.image}" alt="${candidate.name}" class="w-full h-auto object-cover">
+      <div class="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-[rgba(212,175,55,0.3)] mb-4 bg-black/40 flex items-center justify-center">
+        <img src="${candidate.image}" alt="${candidate.name}" class="w-full h-full object-cover" loading="lazy">
       </div>
 
-      <p class="text-gray-400 text-sm mb-1">Candidate</p>
-      <h3 class="text-lg font-bold mb-3">${candidate.name}</h3>
+      <p class="text-gray-400 text-xs sm:text-sm mb-1 font-medium">Candidate</p>
+      <div class="min-h-[3.2rem] flex items-center justify-center mb-3">
+        <h3 class="text-base sm:text-lg font-bold text-white leading-snug">${candidate.name}</h3>
+      </div>
 
       <div class="mt-auto w-full flex flex-col items-center">
         <div class="w-2/3 h-px bg-[rgba(212,175,55,0.3)] mb-3"></div>
 
-        <p class="text-gray-400 text-sm mb-1">Votes</p>
-        <p class="text-2xl font-black gold-text mb-3">
+        <p class="text-gray-400 text-xs sm:text-sm mb-1">Votes</p>
+        <p class="text-2xl sm:text-3xl font-black gold-text mb-3">
           <span data-role="votes">0</span>
         </p>
 
-        <div class="progress-track mb-1">
+        <div class="progress-track mb-1.5">
           <div class="progress-fill" data-role="progress" style="width:0%"></div>
         </div>
-        <p class="text-xs text-gray-400 mb-4"><span data-role="percentage">0</span>%</p>
+        <p class="text-xs text-gray-400 mb-4 font-semibold"><span data-role="percentage">0</span>%</p>
 
         <button data-role="vote-btn"
-                class="vote-btn w-full py-3 rounded-xl flex items-center justify-center gap-2"
+                class="vote-btn w-full py-3.5 rounded-xl flex items-center justify-center gap-2 text-base font-bold"
                 onclick="handleVoteClick(event, '${candidate.id}', '${candidate.name.replace(/'/g, "\\'")}')">
           <span>✅</span> صوّت الآن
         </button>
@@ -195,10 +198,10 @@ function startPolling() {
    4. DEVICE IDENTITY (LOCAL STORAGE)
    --------------------------------------------------------- */
 function getDeviceId() {
-  let id = localStorage.getItem('live_vote_device_idseason3');
+  let id = localStorage.getItem('live_vote_device_idseason4');
   if (!id) {
     id = 'device_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-    localStorage.setItem('live_vote_device_idseason3', id);
+    localStorage.setItem('live_vote_device_idseason4', id);
   }
   return id;
 }
@@ -207,7 +210,7 @@ function getDeviceId() {
    5. VOTING
    --------------------------------------------------------- */
 function localVoteKey() {
-  return `voted_statusseason4`;
+  return `voted_statusseason5`;
 }
 
 function checkLocalVoteFlag() {

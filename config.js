@@ -33,26 +33,22 @@ const CONFIG = {
   // 4) Candidates. "id" must match what you store in the sheet.
   //    "image" can be any public image URL or a local path.
   CANDIDATES: [
-    {
+     {
       id: "CS1",
-      name: "  المشارك / طلال نزال العازمي",
-      image: "allimg/1.jpeg"
-    },
-    {
-      id: "CS2",
-      name: "المشارك / عيسى العازمي",
-      image: "allimg/2.jpeg"
-    },
-    {
-      id: "CS3",
-      name: "المشارك / مبارك ملفي بن عزازة الحربي ",
+      name: "المشارك / ناجح عوض العنزي",
       image: "allimg/3.jpeg"
     },
     {
-      id: "CS4",
-      name: "المشارك / نايل الخريم المساعرة ",
-      image: "allimg/4.jpeg"
-    }
+      id: "CS1",
+      name: "المشارك / أبناء ثواب الشلاحي",
+      image: "allimg/1.jpeg"
+    },
+    {
+      id: "CS3",
+      name: "المشارك / ثامر الدعجاني",
+      image: "allimg/2.jpeg"
+    },
+   
   ],
 
 

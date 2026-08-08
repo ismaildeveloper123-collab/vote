@@ -38,17 +38,19 @@
   <!-- Ranking table -->
   <div class="glass-card rounded-3xl p-6">
     <h2 class="text-lg font-bold mb-4 gold-text">Candidate Ranking</h2>
-    <table class="w-full text-left">
-      <thead>
-        <tr class="text-gray-400 text-sm border-b border-[rgba(212,175,55,0.2)]">
-          <th class="py-2">Rank</th>
-          <th class="py-2">Candidate</th>
-          <th class="py-2">Votes</th>
-          <th class="py-2">Percentage</th>
-        </tr>
-      </thead>
-      <tbody id="rankingBody"></tbody>
-    </table>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left min-w-[320px]">
+        <thead>
+          <tr class="text-gray-400 text-sm border-b border-[rgba(212,175,55,0.2)]">
+            <th class="py-2">Rank</th>
+            <th class="py-2">Candidate</th>
+            <th class="py-2">Votes</th>
+            <th class="py-2">Percentage</th>
+          </tr>
+        </thead>
+        <tbody id="rankingBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Charts -->
